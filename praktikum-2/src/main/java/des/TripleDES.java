@@ -1,34 +1,41 @@
+package des;
+
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
 public class TripleDES {
 
-    private SecretKey key;
-    private Cipher cipher;
+    private final DES des_1;
+    private final DES des_2;
+    private final DES des_3;
 
 
-    public TripleDES(byte[] keyPart1, byte[] keyPart2, byte[] keyPart3) throws Exception {
+    public TripleDES(byte[] keyPart1, byte[] keyPart2, byte[] keyPart3) {
         if (keyPart1.length != 8 | keyPart2.length != 8 | keyPart3.length != 8) {
             throw new IllegalArgumentException("keyParts must be 8 bytes.");
         }
 
-        byte[] fullKey = new byte[24];
-        System.arraycopy(keyPart1, 0, fullKey, 0, 8);
-        System.arraycopy(keyPart2, 0, fullKey, 8, 8);
-        System.arraycopy(keyPart3, 0, fullKey, 16, 8);
-
-        this.key = new SecretKeySpec(fullKey, "DESede");
-        this.cipher = Cipher.getInstance("DESede/ECB/NoPadding");
+        this.des_1= new DES(keyPart1);
+        this.des_2= new DES(keyPart2);
+        this.des_3=new DES(keyPart3);
     }
 
     public byte[] encryptBytes(byte[] plaintextBytes) throws Exception {
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        return cipher.doFinal(plaintextBytes);
+        byte[] resultBytes= new byte[8];
+        this.des_1.encrypt(plaintextBytes,0,resultBytes,0);
+        this.des_2.decrypt(resultBytes,0,resultBytes,0);
+        this.des_3.encrypt(resultBytes,0,resultBytes,0);
+
+        return resultBytes;
     }
 
-    public byte[] decryptBytes(byte[] chiffreBytes) throws Exception {
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        return cipher.doFinal(chiffreBytes);
+    public byte[] decryptBytes(byte[] chiffreBytes)  {
+        byte [] resultBytes= new byte[8];
+        this.des_3.decrypt(chiffreBytes,0,resultBytes,0);
+        this.des_2.encrypt(resultBytes,0,resultBytes,0);
+        this.des_1.decrypt(resultBytes,0,resultBytes,0);
+
+        return resultBytes;
     }
 
     private String byteArraytoHexString(byte[] byteArray) {
