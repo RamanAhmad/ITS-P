@@ -36,6 +36,10 @@ public class LCG {
         long m = (long) Math.pow(2, 32);
 
         // A set to store unique least significant bytes of generated pseudorandom numbers
+        // Parameterkombination: VAX VMS-Generator von Marsaglia
+        long a = 69069;
+        long b = 1;
+        long m = (long) Math.pow(2, 32);
         HashSet<Integer> hashSet = new HashSet<>();
 
         // Generate 256 pseudorandom numbers and store their least significant bytes
