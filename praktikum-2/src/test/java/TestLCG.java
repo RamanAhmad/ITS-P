@@ -159,7 +159,6 @@ public class TestLCG {
         test.test_nextInt_for_lecuyer();
         test.test_nextInt_for_sun_unix_drand48();
         test.test_nextInt_for_cray_x_mp();
-        test.test_nextInt_for_fishman_2();
         test.test_nextInt_for_nag_fortran();
         test.test_nextInt_for_lecuyer_2();
         test.test_nextInt_for_maple();

@@ -15,9 +15,10 @@ public class LCG {
 
     public static void main(String[] args) {
         LCG lcg = new LCG(12345);
-          long a = 69069;
-          long b = 1;
-          long m = (long) Math.pow(2, 32);
+        // Parameterkombination: VAX VMS-Generator von Marsaglia
+        long a = 69069;
+        long b = 1;
+        long m = (long) Math.pow(2, 32);
         HashSet<Integer> hashSet = new HashSet<>();
 
         for (int i = 0; i < 256; i++) {
