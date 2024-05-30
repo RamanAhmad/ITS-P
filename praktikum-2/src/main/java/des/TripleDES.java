@@ -15,25 +15,25 @@ public class TripleDES {
             throw new IllegalArgumentException("keyParts must be 8 bytes.");
         }
 
-        this.des_1= new DES(keyPart1);
-        this.des_2= new DES(keyPart2);
-        this.des_3=new DES(keyPart3);
+        this.des_1 = new DES(keyPart1);
+        this.des_2 = new DES(keyPart2);
+        this.des_3 = new DES(keyPart3);
     }
 
-    public byte[] encryptBytes(byte[] plaintextBytes) throws Exception {
-        byte[] resultBytes= new byte[8];
-        this.des_1.encrypt(plaintextBytes,0,resultBytes,0);
-        this.des_2.decrypt(resultBytes,0,resultBytes,0);
-        this.des_3.encrypt(resultBytes,0,resultBytes,0);
+    public byte[] encryptBytes(byte[] plaintextBytes) {
+        byte[] resultBytes = new byte[8];
+        this.des_1.encrypt(plaintextBytes, 0, resultBytes, 0);
+        this.des_2.decrypt(resultBytes, 0, resultBytes, 0);
+        this.des_3.encrypt(resultBytes, 0, resultBytes, 0);
 
         return resultBytes;
     }
 
-    public byte[] decryptBytes(byte[] chiffreBytes)  {
-        byte [] resultBytes= new byte[8];
-        this.des_3.decrypt(chiffreBytes,0,resultBytes,0);
-        this.des_2.encrypt(resultBytes,0,resultBytes,0);
-        this.des_1.decrypt(resultBytes,0,resultBytes,0);
+    public byte[] decryptBytes(byte[] chiffreBytes) {
+        byte[] resultBytes = new byte[8];
+        this.des_3.decrypt(chiffreBytes, 0, resultBytes, 0);
+        this.des_2.encrypt(resultBytes, 0, resultBytes, 0);
+        this.des_1.decrypt(resultBytes, 0, resultBytes, 0);
 
         return resultBytes;
     }
@@ -47,16 +47,16 @@ public class TripleDES {
         return ret.toString();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         /* Testcode */
         TripleDES cipher = new TripleDES("qwertzui".getBytes(), "asdfghjk".getBytes(), "yxcvbnm,".getBytes());
 
         byte[] plain = "12345678".getBytes();
         byte[] chiffre = cipher.encryptBytes(plain);
-        System.out.println(" Encrypted: " +  cipher.byteArraytoHexString(plain) + " to: " + cipher.byteArraytoHexString(chiffre));
+        System.out.println(" Encrypted: " + cipher.byteArraytoHexString(plain) + " to: " + cipher.byteArraytoHexString(chiffre));
 
         byte[] plainNew = cipher.decryptBytes(chiffre);
-        System.out.println(" Decrypted: " + cipher.byteArraytoHexString(plainNew) );
+        System.out.println(" Decrypted: " + cipher.byteArraytoHexString(plainNew));
 
         if (java.util.Arrays.equals(plain, plainNew)) {
             System.out.println(" ---> Erfolg!");
