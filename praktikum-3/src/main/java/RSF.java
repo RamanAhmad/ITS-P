@@ -16,6 +16,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class RSF {
     public static void main(String[] args) {
+        if (args.length != 4) {
+            System.err.println("Usage: java RSF <receiverPrvKey> <senderPubKey> <inputFile> <outputFile>");
+            System.exit(1);
+        }
         try {
             PrivateKey receiverPrvKey = readPrivateKey(args[0]);
             PublicKey senderPubKey = readPublicKey(args[1]);

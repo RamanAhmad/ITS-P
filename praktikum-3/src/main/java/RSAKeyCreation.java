@@ -3,6 +3,11 @@ import java.security.*;
 
 public class RSAKeyCreation {
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.err.println("Usage: java RSAKeyCreation <ownerName>");
+            System.exit(1);
+        }
+
         String ownerName = args[0];
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
