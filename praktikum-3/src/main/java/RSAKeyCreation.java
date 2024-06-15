@@ -24,7 +24,7 @@ public class RSAKeyCreation {
     }
 
     private static void saveKey(String ownerName, Key key, String extension) {
-        String directoryPath = "C:\\Users\\jonas\\IdeaProjects\\ITS-P\\praktikum-3\\docs";
+        String directoryPath = System.getProperty("user.dir") + "\\praktikum-3\\docs";
         String filePath = directoryPath + "\\" + ownerName + extension;
 
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePath))) {
