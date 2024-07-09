@@ -69,6 +69,7 @@ public class KerberosSim {
 		myFileserver = new Server(serverName);
 		myFileserver.setupService(myKDC); // Schlüsselerzeugung und -austausch
 
+
 		// User-Account und Client erzeugen
 		myKDC.userRegistration(userName, password);
 		myClient = new Client(myKDC, myFileserver);
