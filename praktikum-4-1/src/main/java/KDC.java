@@ -101,6 +101,7 @@ public class KDC extends Object {
 	 */
 
 	public TicketResponse requestServerTicket(Ticket tgsTicket, Auth tgsAuth, String serverName, long nonce) {
+		System.out.println("---------------REQUEST SERVER TICKET START--------------");
 		// Servername prüfen
 		if (!serverName.equals(this.serverName)) {
             System.out.println("Servername nicht korrekt");
@@ -113,7 +114,10 @@ public class KDC extends Object {
             System.out.println("Ticket abgelaufen");
 			return null;
         }
-		tgsTicket.print();
+		if (!tgsTicket.getServerName().equals(tgsName)) {
+			System.out.println("Ticket enthält falschen TGS Namen");
+			return null;
+		}
 		long sessKey = tgsTicket.getSessionKey();
 
 		// Authentifikation entschlüsseln und prüfen
@@ -123,9 +127,14 @@ public class KDC extends Object {
 			return null;
         }
 		if (!timeFresh(tgsAuth.getCurrentTime())) {
-            System.out.println("CurrentTime nicht frisch");
+            System.out.println("Auth Zeit abgelaufen");
 			return null;
         }
+		System.out.println("---------------REQUEST SERVER TICKET: TGS TICKET--------------");
+		tgsTicket.print();
+		System.out.println();
+		System.out.println("---------------REQUEST SERVER TICKET: AUTH--------------");
+		tgsAuth.print();
 
 		// Server Session Key erstellen (K C-S)
 		long srvSessionKey = generateSimpleKey();
@@ -143,6 +152,7 @@ public class KDC extends Object {
 		// und verschlüsseln
 		srvTicketResponse.encrypt(sessKey);
 
+		System.out.println("---------------REQUEST SERVER TICKET END--------------");
 		return srvTicketResponse;
 	}
 

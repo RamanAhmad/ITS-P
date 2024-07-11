@@ -36,6 +36,7 @@ public class Server extends Object {
 
 	public boolean requestService(Ticket srvTicket, Auth srvAuth,
 		String command, String parameter) {
+		System.out.println("---------------REQUEST SERVICE START---------------");
 
 		// Serverticket prüfen
 		if (srvTicket == null) {
@@ -65,13 +66,20 @@ public class Server extends Object {
 			return false;
 		}
 
+		System.out.println("---------------REQUEST SERVICE: AUTH---------------");
 		srvAuth.print();
+		System.out.println();
+		System.out.println("---------------REQUEST SERVICE: TICKET---------------");
 		srvTicket.print();
+		System.out.println();
+		System.out.println();
 
 		// showFile ausführen
 		if (command.equals("showFile")) {
 			showFile(parameter);
 		}
+
+		System.out.println("---------------REQUEST SERVICE END---------------");
 		return true;
 	}
 

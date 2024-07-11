@@ -21,6 +21,7 @@ public class Client extends Object {
 
 	public boolean login(String userName, char[] password) {
 
+		System.out.println("---------------LOGIN START---------------");
 		// TGS Ticket anfordern
 		long nonce1 = generateNonce();
 		TicketResponse tgsTicketResponse = myKDC.requestTGSTicket(userName, "myTGS", nonce1);
@@ -36,19 +37,25 @@ public class Client extends Object {
 			return false;
 		}
 		if (tgsTicketResponse.getNonce() != nonce1) {
+			System.out.println("TGS Ticket Nonce nicht korrekt");
 			return false;
 		}
 
 		// Ticket printen und Werte speichern
+		System.out.println("---------------LOGIN: TicketResponse---------------");
 		tgsTicketResponse.print();
+		System.out.println();
 		tgsTicket = tgsTicketResponse.getResponseTicket();
 		currentUser = userName;
 		tgsSessionKey = tgsTicketResponse.getSessionKey();
 
+
+		System.out.println("---------------LOGIN END---------------");
 		return true;
 	}
 
 	public boolean showFile(Server fileServer, String filePath) {
+		System.out.println("---------------SHOW-FILE START---------------");
 		boolean serviceOK = false;
 		long currentTime = (new Date()).getTime();
 
@@ -65,13 +72,10 @@ public class Client extends Object {
 
 		// Neues Serverticket beim TGS anfordern
 		TicketResponse srvTicketResponse = myKDC.requestServerTicket(tgsTicket,clientAuth,fileServer.getName(),nonce2);
-		System.out.println("Client hat Antwort mit Serverticket bekommen: ");
 		if (srvTicketResponse != null) {
 			// TGS-Response entschlüsseln
-			if (srvTicketResponse.decrypt(tgsSessionKey)) {
-				srvTicketResponse.print();
-			} else {
-				System.err.println("TGS Session Key ist ungültig!");
+			if (!srvTicketResponse.decrypt(tgsSessionKey)) {
+				System.out.println("TGS Session Key ist ungültig!");
 				srvTicketResponse = null;
 			}
 		} else {
@@ -79,7 +83,8 @@ public class Client extends Object {
 		}
 		// TGS-Response auswerten
 		if (srvTicketResponse != null && srvTicketResponse.getNonce() == nonce2) {
-			// Entschlüsselung ok
+			System.out.println("---------------SHOW-FILE: SRV Ticket Reponse---------------");
+			srvTicketResponse.print();
 		} else {
 			System.out.println("Serverticket nicht korrekt!!");
 			return false;
@@ -92,6 +97,8 @@ public class Client extends Object {
 
 		// Service Request starten
 		serviceOK = fileServer.requestService(srvTicketResponse.getResponseTicket(),srvAuth,"showFile",filePath);
+
+		System.out.println("---------------SHOW-FILE END---------------");
 		return serviceOK;
 	}
 
